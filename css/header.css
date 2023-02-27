@@ -1,0 +1,98 @@
+
+header{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    padding:0;
+}
+.hamburger-container, .hamburger{
+    display:none;
+}
+.hamburger .hamburger-inner, .hamburger .hamburger-inner::after, .hamburger .hamburger-inner::before{
+background-color: teal;
+}
+.hamburger.is-active .hamburger-inner, .hamburger.is-active .hamburger-inner::after, .hamburger.is-active .hamburger-inner::before{
+    background-color: white;
+} 
+.page-title{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+    color:white;
+}
+.page-title>h1{
+    font-size: 1.5rem;
+    color: whitesmoke;
+}
+nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3rem;
+    justify-content: center;
+}
+nav>button {
+    padding:1rem;
+    text-decoration: none;
+    font-family:  inherit;
+    font-weight: 600;
+    font-size: 1.25rem;
+    border:none;
+    width: 100%;
+    opacity: .9;
+    color: whitesmoke;
+    background-color: inherit;
+}
+nav > button:hover {
+    color: black;
+    background-color: white;
+}
+header>nav.is-active{
+    display:flex;
+}
+@media screen and (max-width: 768px) { 
+    /* Mobile only */
+    header{
+        position:fixed;
+        top:0;
+        overflow: auto;
+        height:min-content;
+        width: 100%;
+        z-index: 1;
+    }
+    header.is-active{
+        background-color: rgba(0,0,0,0.7);
+    }
+    .page-title{
+        display: none;
+    }
+    .hamburger-container, .hamburger{
+        display: block;
+        float:left;
+    }
+    nav{
+        flex-direction: column;
+        display:flex;
+        opacity:1;
+        width: 100%;
+    }
+    nav>button{
+        display:none;
+        text-align: center;
+
+    }
+    nav>button.is-active{
+        display: block;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+    }
+    .page-title.is-active{
+        display:block;
+    }
+}
