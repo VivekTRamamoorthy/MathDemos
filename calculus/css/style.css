@@ -1,0 +1,53 @@
+#slope-tracer-function-canvas{
+    width: 50vh;
+    height:40vh;
+    background-color: white;
+}
+#slope-tracer-derivative-canvas{
+    width: 50vh;
+    height:40vh;
+    background-color: white;
+}
+#graphs{
+    margin:2rem;
+    width: 50vh;
+    height:50vh;
+    background-color: white;
+}
+.trackingDiv{
+    display:grid;
+    grid-template-columns: 1fr 4fr;
+    place-items: center;
+    gap:1rem;
+}
+.flex{
+    display:flex
+}
+.gap{
+    gap: 2rem;
+}
+
+.row{
+    flex-direction: row;
+}
+.column{
+    flex-direction: column;
+}
+.center{
+    align-items: center;
+    justify-content: center;
+}
+.grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px,1fr));
+}
+button{
+    font-family: inherit;
+    box-shadow: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 1.25rem;
+    border:none;
+    padding: .5rem;
+    background-color: #222;
+}

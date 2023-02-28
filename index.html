@@ -15,13 +15,13 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="calculus/css/style.css"/>
     
     <!-- MATLABJS -->
-    <script defer src="js/libraries/plotlib.js"></script>
-    <script defer src="js/libraries/Matlab.js"></script>
+    <script src="js/libraries/Matlab.js"></script>
+    <script src="js/libraries/plotlib.js"></script>
     
-    <!-- SCRIPTS  -->
-    <script defer src="js/pages/eigen.js"></script>
+
     
     <!-- LATEX equation interpreter -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
@@ -29,7 +29,27 @@
     <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
     <!-- To automatically render math in text elements, include the auto-render extension: -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js" integrity="sha384-yACMu8JWxKzSp/C1YV86pzGiQ/l1YUfE8oPuahJQxzehAjEt2GiQuy/BIvl9KyeF" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-    
+    <script defer >
+        function LaTeXrender(elem=document.body) {
+            renderMathInElement(elem, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ]
+            });
+            console.log("latex rendered")
+        }
+
+
+    </script>
+
+
+    <!-- SCRIPTS  -->
+    <script defer src="calculus/js/graphs.js"></script>
+    <script defer src="calculus/js/slope_tracer.js"></script>
+    <script defer src="js/pages/eigen.js"></script>
     
 </head>
 <body>
@@ -61,12 +81,44 @@
           
             <section id="calculus">
                 <h1>Calculus</h1>
+            <div>
+                Let's start from graphs. Choose a function to plot its graph below.
+            </div>
+            <div class="flex row center gap">
+                <button onclick="plotFunction(x=>1)">y=1</button>
+                <button onclick="plotFunction(x=>x)">y=x</button>
+                <button onclick="plotFunction(x=>Math.pow(x,2))">y=x^2</button>
+                <button onclick="plotFunction(x=>Math.sin(x))">y=sin(x)</button>
+                <button onclick="plotFunction(x=>Math.cos(x))">y=cos(x)</button>
+            </div>
+            <div class="flex center">
+                <canvas id="graphs" width="400" height="400"></canvas>
+            </div>
+
+            <h1>Tracking \( \frac{\Delta y}{\Delta x} \) in \( y=x \)</h1>
+            <div class="flex row center gap">
+
+                <div class="trackingDiv">
+                    <div> \( y(x) \)</div>
+                    <canvas id="slope-tracer-function-canvas"></canvas>
+                    <div>\( \frac{\Delta y}{\Delta x } \)</div>
+                    <canvas id="slope-tracer-derivative-canvas"></canvas>
+                </div>
+                <div class="flex column center">
+                    <div class="label" id="slopeTracerDeltaXLabel">\(\Delta x\)</div>
+                    <input type="range" name="deltax" id="slopeTracerDeltaXSlider">
+                </div>
+            </div>
+
             </section>
             
+
             <!-- <section id="aplusbcubed">
                 <h1>(a+b)^3</h1>
                 <canvas id="aplusbcubedCanvas"></canvas>
             </section> -->
+
+
             <section id="eigen">
                 <h1>Eigen vectors and Eigen values</h1>
                 Consider the linear transformation: 
@@ -96,7 +148,7 @@
             });
             document.getElementById(elemToUnhide).classList.remove("hide");
         }
-        unhideElement("home")
+        unhideElement("calculus")
         
     </script>
       <!-- <script async src="./js/libraries/es-module-shims.js"></script>

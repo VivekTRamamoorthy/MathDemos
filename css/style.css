@@ -5,7 +5,7 @@ body{
   margin:0;
   font-family: Geneva, Arial, Helvetica, sans-serif;
   background-color: #004568;
-  font-size:medium;
+  font-size:1.25rem;
 }
 .page-container{
   display:grid;
@@ -13,7 +13,7 @@ body{
   height: 100vh;
 }
 .content-container{
-  overflow:scroll;
+  /* overflow:scroll; */
   background-color: whitesmoke;
 
 }

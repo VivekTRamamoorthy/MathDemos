@@ -172,6 +172,21 @@ const plot = function(x,y,...args) {
                 case 'color':
                 line.color = args[index+1]
                 break;
+                case 'grid':
+                figure.grid = args[index+1]
+                break;
+                case 'gridColor':
+                figure.gridColor = args[index+1]
+                break;
+                case 'xTicks':
+                figure.xTicks = args[index+1]
+                break;
+                case 'yTicks':
+                figure.yTicks = args[index+1]
+                break;
+                case 'axisColor':
+                figure.axisColor = args[index+1]
+                break;
                 
                 default:
                 break;
@@ -214,8 +229,8 @@ class Figure{
         function convertRemToPixels(rem) {    
             return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
         }
-        this.padding = convertRemToPixels(3);
-        this.fontSize = convertRemToPixels(1);
+        this.padding = convertRemToPixels(5);
+        this.fontSize = convertRemToPixels(1.5);
         let canvaselem = document.getElementById(canvasId);
         if(canvaselem ==null){console.error('No such canvas exists in DOM')}
         canvaselem.width =  canvaselem.clientWidth 
@@ -224,8 +239,8 @@ class Figure{
         this.c = canvaselem.getContext('2d')
         this.width = canvaselem.width;
         this.height = canvaselem.height;
-        this.lineWidth = 3;
-        this.boxlineWidth = 2;
+        this.lineWidth = 5;
+        this.boxlineWidth = 3;
         this.hold = false;
         this.xscale='linear';
         this.yscale='linear';
@@ -233,6 +248,13 @@ class Figure{
         this.ylabel='y';
         this.title='';
         this.axis ='auto';
+        this.axisColor = '#000';
+        this.gridColor = '#cc0';
+        this.grid = "on"
+        this.gridLineWidth = 1;
+        this.xTicks = "auto";
+        this.yTicks = "auto";
+
     }
     
     append(line){
@@ -319,9 +341,9 @@ class Figure{
         
         
         c.font = fontSizePx+ 'px Arial';
-        c.fillStyle='#000000' ;
+        c.fillStyle=this.axisColor ;
         c.textAlign='center';
-        c.strokeStyle = '#000';
+        c.strokeStyle =this.axisColor;
         c.lineWidth = this.boxlineWidth;
         
         // box
@@ -334,61 +356,86 @@ class Figure{
         c.stroke();     
         
         // x Ticks
-        let xspan = xlim[1] - xlim[0];
-        let yspan = ylim[1] - ylim[0];
+        // let xspan = xlim[1] - xlim[0];
+        // let yspan = ylim[1] - ylim[0];
         
-        let noOfxTicks = Math.max(2,Math.round((this.width-2*this.padding)/(5*this.fontSize)))
-        let xincrement = parseFloat((xspan/noOfxTicks).toPrecision(1));
-        let xbegin = Math.round(xlim[0]/xincrement)*xincrement;
-        let xend = Math.round(xlim[1]/xincrement)*xincrement;
-        let xTicks=range(xbegin,xincrement,xend)
-        xTicks[0]=xlim[0];
-        xTicks[xTicks.length-1]= xlim[1];
+        // let noOfxTicks = Math.max(2,Math.round((this.width-2*this.padding)/(5*this.fontSize)))
+        // let xincrement = parseFloat((xspan/noOfxTicks).toPrecision(1));
+        // let xbegin = Math.round(xlim[0]/xincrement)*xincrement;
+        // let xend = Math.round(xlim[1]/xincrement)*xincrement;
+        // let xTicks=range(xbegin,xincrement,xend)
+        // xTicks[0]=xlim[0];
+        // xTicks[xTicks.length-1]= xlim[1];
         
-        if(this.xscale == 'log'){
-            if(xlim[0]<=0){console.error("Log scale of zero or negative is not allowed")}
-            let powerOfTenSpan = Math.log(xlim[1]/xlim[0])/Math.log(10)
-            let powerOfTenIncrement = parseFloat((powerOfTenSpan/noOfxTicks).toPrecision(1));
+        // if(this.xscale == 'log'){
+        //     if(xlim[0]<=0){console.error("Log scale of zero or negative is not allowed")}
+        //     let powerOfTenSpan = Math.log(xlim[1]/xlim[0])/Math.log(10)
+        //     let powerOfTenIncrement = parseFloat((powerOfTenSpan/noOfxTicks).toPrecision(1));
             
-            let minPowerOfTen = Math.round(Math.log(xlim[0])/Math.log(10))
-            let maxPowerOfTen = Math.round(Math.log(xlim[1])/Math.log(10))
-            let powerTicks = range(minPowerOfTen,powerOfTenIncrement,maxPowerOfTen)
-            xTicks=pow(10,powerTicks)
-            xTicks[0]=xlim[0];
-            xTicks[xTicks.length-1]=xlim[1]
-        }
+        //     let minPowerOfTen = Math.round(Math.log(xlim[0])/Math.log(10))
+        //     let maxPowerOfTen = Math.round(Math.log(xlim[1])/Math.log(10))
+        //     let powerTicks = range(minPowerOfTen,powerOfTenIncrement,maxPowerOfTen)
+        //     xTicks=pow(10,powerTicks)
+        //     xTicks[0]=xlim[0];
+        //     xTicks[xTicks.length-1]=xlim[1]
+        // }
+        // if (this.xTicks !=0)
+        let xTicks = this.getxTicks()
+
         for (let i = 0; i < xTicks.length; i++) {
             let xvalue = xTicks[i];
+            if (this.grid =="on"){ // grid drawing
+                c.beginPath()
+                c.moveTo( this.xtoPx(xvalue),this.ytoPx(ylim[0])) ;
+                c.lineTo( this.xtoPx(xvalue),this.ytoPx(ylim[1]));
+                c.strokeStyle=this.gridColor ;         c.lineWidth = this.gridLineWidth;
+                c.stroke();
+            }
+            c.beginPath()
+            c.strokeStyle=this.axisColor ; c.lineWidth = this.boxlineWidth;
             c.moveTo( this.xtoPx(xvalue),this.ytoPx(ylim[0])+.01*this.height) ;
             c.lineTo( this.xtoPx(xvalue),this.ytoPx(ylim[0])-.01*this.height );
             c.fillText(parseFloat(xvalue.toPrecision(4)).toString(), this.xtoPx(xvalue),this.ytoPx(ylim[0])+.01*this.height+fontSizePx );
             c.stroke();
             
+
         }
         
-        // y Ticks
-        let noOfyTicks = Math.max(2,Math.round((this.height-2*this.padding)/(3*this.fontSize)))
-        let yincrement = parseFloat((yspan/noOfyTicks).toPrecision(1));
-        let ybegin = Math.round(ylim[0]/yincrement)*yincrement;
-        let yend = Math.round(ylim[1]/yincrement)*yincrement;
-        let yTicks=range(ybegin,yincrement,yend)
-        yTicks[0]=ylim[0];
-        yTicks[yTicks.length-1]= ylim[1];
+        // // y Ticks
+        // let noOfyTicks = Math.max(2,Math.round((this.height-2*this.padding)/(3*this.fontSize)))
+        // let yincrement = parseFloat((yspan/noOfyTicks).toPrecision(1));
+        // let ybegin = Math.round(ylim[0]/yincrement)*yincrement;
+        // let yend = Math.round(ylim[1]/yincrement)*yincrement;
+        // let yTicks=range(ybegin,yincrement,yend)
+        // yTicks[0]=ylim[0];
+        // yTicks[yTicks.length-1]= ylim[1];
         
-        if(this.yscale == 'log'){
-            if(ylim[0]<=0){console.error("Log scale of zero or negative is not allowed")}
-            let powerOfTenSpan = Math.log(ylim[1]/ylim[0])/Math.log(10)
-            let powerOfTenIncrement = parseFloat((powerOfTenSpan/noOfyTicks).toPrecision(1));
+        // if(this.yscale == 'log'){
+        //     if(ylim[0]<=0){console.error("Log scale of zero or negative is not allowed")}
+        //     let powerOfTenSpan = Math.log(ylim[1]/ylim[0])/Math.log(10)
+        //     let powerOfTenIncrement = parseFloat((powerOfTenSpan/noOfyTicks).toPrecision(1));
             
-            let minPowerOfTen = Math.round(Math.log(ylim[0])/Math.log(10))
-            let maxPowerOfTen = Math.round(Math.log(ylim[1])/Math.log(10))
-            let powerTicks = range(minPowerOfTen,powerOfTenIncrement,maxPowerOfTen)
-            yTicks=pow(10,powerTicks)
-            yTicks[0]=ylim[0];
-            yTicks[yTicks.length-1]=ylim[1]
-        }
+        //     let minPowerOfTen = Math.round(Math.log(ylim[0])/Math.log(10))
+        //     let maxPowerOfTen = Math.round(Math.log(ylim[1])/Math.log(10))
+        //     let powerTicks = range(minPowerOfTen,powerOfTenIncrement,maxPowerOfTen)
+        //     yTicks=pow(10,powerTicks)
+        //     yTicks[0]=ylim[0];
+        //     yTicks[yTicks.length-1]=ylim[1]
+        // }
+        let yTicks = this.getyTicks()
+
         for (let i = 0; i < yTicks.length; i++) {
             let yvalue = yTicks[i];
+
+            if (this.grid =="on"){ // grid drawing
+                c.beginPath()
+                c.strokeStyle=this.gridColor ;   c.lineWidth = this.gridLineWidth;
+                c.moveTo( this.xtoPx(xlim[0]),this.ytoPx(yvalue)) ;
+                c.lineTo( this.xtoPx(xlim[1]),this.ytoPx(yvalue));
+                c.stroke();
+            }
+            c.beginPath()
+            c.strokeStyle=this.axisColor ; c.lineWidth = this.boxlineWidth;
             c.moveTo( this.xtoPx(xlim[0])+.01*this.width,this.ytoPx( yvalue)) ;
             c.lineTo( this.xtoPx(xlim[0])-.01*this.width,this.ytoPx( yvalue) );
             c.fillText(parseFloat(yvalue.toPrecision(4)), this.xtoPx(xlim[0])-.4*this.padding, this.ytoPx(yvalue));
@@ -542,6 +589,67 @@ class Figure{
     set(parameter,value){
         this[parameter]=value;
         this.draw();
+    }
+    getxTicks(){
+        // x Ticks
+        if (this.xTicks instanceof Array && this.xTicks.length!=0){
+            return this.xTicks
+        } else{
+            let xlim = this.xlim;
+            let xspan = xlim[1] - xlim[0];
+            
+            let noOfxTicks = Math.max(2,Math.round((this.width-2*this.padding)/(5*this.fontSize)))
+            let xincrement = parseFloat((xspan/noOfxTicks).toPrecision(1));
+            let xbegin = Math.round(xlim[0]/xincrement)*xincrement;
+            let xend = Math.round(xlim[1]/xincrement)*xincrement;
+            let xTicks=range(xbegin,xincrement,xend)
+            xTicks[0]=xlim[0];
+            xTicks[xTicks.length-1]= xlim[1];
+            
+            if(this.xscale == 'log'){
+                if(xlim[0]<=0){console.error("Log scale of zero or negative is not allowed")}
+                let powerOfTenSpan = Math.log(xlim[1]/xlim[0])/Math.log(10)
+                let powerOfTenIncrement = parseFloat((powerOfTenSpan/noOfxTicks).toPrecision(1));
+                
+                let minPowerOfTen = Math.round(Math.log(xlim[0])/Math.log(10))
+                let maxPowerOfTen = Math.round(Math.log(xlim[1])/Math.log(10))
+                let powerTicks = range(minPowerOfTen,powerOfTenIncrement,maxPowerOfTen)
+                xTicks=pow(10,powerTicks)
+                xTicks[0]=xlim[0];
+                xTicks[xTicks.length-1]=xlim[1]
+            }
+            return xTicks
+        }
+    }
+    getyTicks(){
+        // x Ticks
+        if (this.yTicks instanceof Array && this.yTicks.length!=0){
+            return this.xTicks
+        } else{
+            let ylim = this.ylim;
+            let yspan = ylim[1] - ylim[0];
+            let noOfyTicks = Math.max(2,Math.round((this.height-2*this.padding)/(3*this.fontSize)))
+            let yincrement = parseFloat((yspan/noOfyTicks).toPrecision(1));
+            let ybegin = Math.round(ylim[0]/yincrement)*yincrement;
+            let yend = Math.round(ylim[1]/yincrement)*yincrement;
+            let yTicks=range(ybegin,yincrement,yend)
+            yTicks[0]=ylim[0];
+            yTicks[yTicks.length-1]= ylim[1];
+            
+            if(this.yscale == 'log'){
+                if(ylim[0]<=0){console.error("Log scale of zero or negative is not allowed")}
+                let powerOfTenSpan = Math.log(ylim[1]/ylim[0])/Math.log(10)
+                let powerOfTenIncrement = parseFloat((powerOfTenSpan/noOfyTicks).toPrecision(1));
+                
+                let minPowerOfTen = Math.round(Math.log(ylim[0])/Math.log(10))
+                let maxPowerOfTen = Math.round(Math.log(ylim[1])/Math.log(10))
+                let powerTicks = range(minPowerOfTen,powerOfTenIncrement,maxPowerOfTen)
+                yTicks=pow(10,powerTicks)
+                yTicks[0]=ylim[0];
+                yTicks[yTicks.length-1]=ylim[1]
+            }
+            return yTicks
+        }
     }
     
 }
