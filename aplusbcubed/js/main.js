@@ -9,6 +9,8 @@ scene.background = new THREE.Color(0x004568); // background color
 // Camera
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.set(-10,-10,+10)
+var point = new THREE.Vector3( 2, 2, 2 );
+camera.lookAt( point );
 
 // Renderer
 const renderer = new THREE.WebGLRenderer();
@@ -80,33 +82,6 @@ for (let blockNo = 0; blockNo < blockDimensions.length; blockNo++) {
     blocks[blockNo]=block;
     
 }
-
-// // platform
-// let geometry = new THREE.BoxGeometry(platformWidth,platformThickness,platformLength);
-// let materialGrass = new THREE.MeshPhongMaterial( { color: 0xcc4400 } );
-// let platform = new THREE.Mesh( geometry, materialGrass );
-// scene.add( platform );
-// platform.position.x = 0;
-// platform.position.y = -platformThickness/2;
-// platform.position.z = 0;
-
-// block 1
-// Base platform
-// const materialSteel = new THREE.MeshPhongMaterial( { color: 0x71797E } );
-// let blocks = [];
-// for (let blockNo = 0; blockNo < noOfBlocks; blockNo++) {
-//     const geometryBlock1 = new THREE.BoxGeometry(blockWidth,blockHeight,blockWidth);
-//     const block = new THREE.Mesh( geometryBlock1, materialSteel );
-//     scene.add( block );
-//     block.position.x = 0;
-//     block.position.y = (blockHeight)/2;
-//     block.position.z = (blockNo+1)*(blockSpacing+blockWidth)-platformLength/2;
-//     blocks[blockNo]=block;
-    
-// }
-
-
-
 
 // controls
 
