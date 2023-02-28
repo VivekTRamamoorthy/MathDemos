@@ -4,9 +4,9 @@
 var slopeTracerFunctionCanvas=document.getElementById("slope-tracer-function-canvas");
 var slopeTracerDerivativeCanvas=document.getElementById("slope-tracer-derivative-canvas");
 
-let fun = x => pow(x,2); // function 
-let derivative = x=>x*2; // its derivative
-let prob = "y=x"
+var fun = x => pow(x,2); // function 
+var derivative = x=>x*2; // its derivative
+var prob = "y=x"
 let derivativeString = "y=1"
 var functionPlotHandle, derivativePlotHandle
 var xlimits=[0,1], ylimits=[0,1]
@@ -16,7 +16,6 @@ var deltaX = 1;
 var slopeTracerDeltaXElem = document.getElementById("slopeTracerDeltaXSlider")
 slopeTracerDeltaXElem.oninput=()=>{
     deltaX = slopeTracerDeltaXElem.value*0.01;
-    console.log(deltaX);
     let label = document.getElementById("slopeTracerDeltaXLabel")
     label.innerText = "$\\Delta x$ = "+deltaX.toFixed(1);
     LaTeXrender(label)
@@ -38,32 +37,54 @@ slopeTracerProblem()
 
 function slopeTracerProblem(prob="y=x"){
     switch (prob) {
+        case "y=1":
+            fun = x=> 1;
+            derivative = x=>0;
+            derivativeString = "dy/dx=0";
+            // xlimits=[-10,10]
+            // ylimits=[-10,10]
+            xlimits=[-5,5]
+            ylimits=[-5,5]
+            break;
         case "y=x":
         fun = x=> x;
         derivative = x=>1;
         derivativeString = "dy/dx=1";
-        xlimits=[-10,10]
-        ylimits=[-10,10]
+        // xlimits=[-10,10]
+        // ylimits=[-10,10]
+        xlimits=[-5,5]
+        ylimits=[-5,5]
         break;
         
         case "y=x^2":
         fun = x=> x**2;
         derivative = x=>2*x;
         derivativeString = "dy/dx=2x"
-        xlimits=[-4,4]
-        ylimits=[-1,17]
+        xlimits=[-5,5]
+        ylimits=[-15,15]
         break;
         
         case "y=cosx":
         fun = x=> Math.cos(x);
-        derivative = x=>Math.sin(x);
-        derivativeString = "dy/dx=sin(x)"
-        xlimits=[-Math.PI,Math.PI]
+        derivative = x=>-Math.sin(x);
+        derivativeString = "dy/dx= -sin(x)"
+        // xlimits=[-Math.PI,Math.PI]
+        xlimits=[-5,5]
+        ylimits=[-1.5,1.5]
+        break;
+        case "y=sinx":
+        fun = x=> Math.sin(x);
+        derivative = x=> Math.cos(x);
+        derivativeString = "dy/dx= cos(x)"
+        // xlimits=[-Math.PI,Math.PI]
+        xlimits=[-5,5]
+
         ylimits=[-1.5,1.5]
         break;
         
         
         default:
+
         break;
     }
     slope_tracer_setup()

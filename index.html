@@ -39,7 +39,6 @@
                     {left: "\\[", right: "\\]", display: true}
                 ]
             });
-            console.log("latex rendered")
         }
 
 
@@ -85,11 +84,11 @@
                 Let's start from graphs. Choose a function to plot its graph below.
             </div>
             <div class="flex row center gap">
-                <button onclick="plotFunction(x=>1)">y=1</button>
-                <button onclick="plotFunction(x=>x)">y=x</button>
-                <button onclick="plotFunction(x=>Math.pow(x,2))">y=x^2</button>
-                <button onclick="plotFunction(x=>Math.sin(x))">y=sin(x)</button>
-                <button onclick="plotFunction(x=>Math.cos(x))">y=cos(x)</button>
+                <button onclick="plotFunction(x=>1);slopeTracerProblem('y=1')">y=1</button>
+                <button onclick="plotFunction(x=>x);slopeTracerProblem()">y=x</button>
+                <button onclick="plotFunction(x=>Math.pow(x,2));slopeTracerProblem('y=x^2')">y=x^2</button>
+                <button onclick="plotFunction(x=>Math.sin(x));slopeTracerProblem('y=sinx')">y=sin(x)</button>
+                <button onclick="plotFunction(x=>Math.cos(x));slopeTracerProblem('y=cosx')">y=cos(x)</button>
             </div>
             <div class="flex center">
                 <canvas id="graphs" width="400" height="400"></canvas>
