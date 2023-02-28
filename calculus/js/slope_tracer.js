@@ -17,7 +17,7 @@ var slopeTracerDeltaXElem = document.getElementById("slopeTracerDeltaXSlider")
 slopeTracerDeltaXElem.oninput=()=>{
     deltaX = slopeTracerDeltaXElem.value*0.01;
     let label = document.getElementById("slopeTracerDeltaXLabel")
-    label.innerText = "$\\Delta x$ = "+deltaX.toFixed(1);
+    label.innerText = "$\\Delta x$ = "+deltaX.toFixed(2);
     LaTeXrender(label)
     slopeTracerCanvasUpdate()
 }
@@ -33,9 +33,9 @@ slopeTracerFunctionCanvas.addEventListener("mousemove",(event)=>{
 })
 
 
-slopeTracerProblem()
+// slopeTracerProblem()
 
-function slopeTracerProblem(prob="y=x"){
+function slopeTracerProblem(prob){
     switch (prob) {
         case "y=1":
             fun = x=> 1;
@@ -84,6 +84,7 @@ function slopeTracerProblem(prob="y=x"){
         
         
         default:
+            console.error('problem improperly defined')
 
         break;
     }
@@ -95,10 +96,13 @@ function slope_tracer_setup(){
     let x = range(xlimits[0],.1,xlimits[1]);
     let y = map(x,fun);
     functionPlotHandle = figure("slope-tracer-function-canvas")
-    plot(x,y,'padding',60,'xlabel','','ylabel','','title','y=x^2')
+    plot(x,y,'axis','fixed','xlim',xlimits,'ylim',ylimits,'padding',60,'xlabel','','ylabel','','title','y=x^2','color','red')
     let dydx = map(x, derivative);
+
     derivativePlotHandle = figure("slope-tracer-derivative-canvas")
-    plot(x,dydx,'axis','fixed','xlim',xlimits,'ylim',ylimits,'padding',60,'xlabel','','ylabel','','title',derivativeString,'color','red')
+    // derivativePlotHandle.hold = true;
+    plot(x,dydx,'axis','fixed','xlim',xlimits,'ylim',ylimits,'padding',60,'xlabel','','ylabel','','title',derivativeString,'color','#00f')
+
 }
 
 
@@ -126,12 +130,19 @@ function slopeTracerCanvasUpdate(){
     
     
     // update derivative plot and height line
-    let ptdydx = map(ptx, derivative);
+    // let ptdydx = map(ptx, derivative);
+    let ptdydx = map(ptx, xi=> (fun(xi+deltaX)-fun(xi-deltaX))/(2*deltaX));
+
     derivativePlotHandle.draw()
-    derivativePlotHandle.drawPoint(ptx,ptdydx,5,"#f00") // draw mouse point
-    derivativePlotHandle.drawLine({x:[ptx,ptx],y:[0,ptdydx],color:"#f00"}) // draw mouse point
-    derivativePlotHandle.drawLine({x:[-10,10],y:[0,0],color:"#000"}) // draw mouse point
+    derivativePlotHandle.drawPoint(ptx,ptdydx,5,"#0f0") // draw mouse point
+    derivativePlotHandle.drawLine({x:[ptx,ptx],y:[0,ptdydx],color:"#0f0"}) // draw mouse point
+    derivativePlotHandle.drawLine({x:[-10,10],y:[0,0],color:"#000"}) // draw zero line
     
+    let x = range(xlimits[0],.1,xlimits[1]);
+    // let y = map(x,fun);
+    let delydelx = map(x, xi=> (fun(xi+deltaX)-fun(xi-deltaX))/(2*deltaX));
+    console.log(delydelx);
+    derivativePlotHandle.drawLine({x:x,y:delydelx,color:"#0f0"}) // draw mouse point
 }
 
 
