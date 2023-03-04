@@ -68,14 +68,15 @@
                 <button href="#home"          onclick = "unhideElement('home')"  > Home               </button>
                 <button href="#calculus"  onclick = "unhideElement('calculus')" > Calculus </button>
                 <button href="#aplusbcubed"  onclick = "location.href ='./aplusbcubed';" >\( (a+b)^3 \) </button>           
-                <!-- <button href="#planewaves2d"  onclick = "unhideElement('eigen')" >Eigen vectors </button>            -->
+                <button href="#eigen"  onclick = "unhideElement('eigen')" >Eigen vectors </button>           
+                <button href="#newtonraphson"  onclick = "unhideElement('newtonraphson')" >Newton Raphson method </button>           
             </nav>
         </header>
         
         <div class="content-container">
             <section id="home">
                 <h1>Interactive Math Demos</h1>
-                <p> In this website, you'll find some interactive math demos for students under 19.</p>
+                <p> In this website, you'll find some interactive math demos for students under 19. Click on one of the other tabs to begin.</p>
             </section>
             
             <section id="calculus">
@@ -128,8 +129,8 @@
             </section> -->
             
             
-            <!-- <section id="eigen">
-                <h1>Eigen vectors and Eigen values</h1>
+            <section id="eigen">
+                <h1>Eigen vectors and Eigen values (Work in progress)</h1>
                 <p>
                     Consider the linear transformation: 
                     $$ y= Ax $$
@@ -139,7 +140,6 @@
                     $$  A = \begin{bmatrix} 1 & 0 \\ 0 & 2 \end{bmatrix}$$ 
                 </p>
                 <div class="flex center">
-                    
                     <canvas id="eigenCanvas"></canvas>
                 </div>
                 
@@ -149,7 +149,26 @@
                     In this demo, we will consider a \( 2 \times 2 \) matrix to demonstrate the concept of Eigen vectors.
                     A square matrix \(A\) acting upon a vector \(x\) results in a new vector say \(y\). This is often called a transformation as \(A\) transforms the vector \(x\) into \(y\). For every square
                 </p>
-            </section> -->
+            </section>
+
+            <section id="newtonraphson">
+                <h1>Newton Raphson method demo (Work in Progress)</h1>
+                <p>
+                    Newton Raphson method provides a quick way to compute the roots of a continuous and differentiable function provided its derivative is known.
+                    The steps involved are:
+                    <ol>
+                        <li>Pick an initial point</li>
+                        <li>Compute the slope at the point</li>
+                        <li>Draw a line from the point with this slope until it meets the independent axis</li>
+                        <li>Select this as the new point</li>
+                        <li>Repeat</li>
+                    </ol>
+                </p>
+                <p>Here is a demo of this process:</p>
+                <div class="flex center">
+                    <canvas id="newtonraphsonCanvas"></canvas>
+                </div>
+            </section>
         </div>
         
     </div>
